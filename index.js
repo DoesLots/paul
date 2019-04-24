@@ -4,7 +4,7 @@ const Discord = require("discord.js")
 const bot = new Discord.Client({disableEveryone: true})
 
 bot.on("ready", async () => {
-    console.log(`${bot.user.username} is online!`)
+    console.log(`${bot.user.username} is online on ${bot.guilds.size} Servers!`)
     bot.user.setActivity("with JavaScript")
 })
 
@@ -33,7 +33,7 @@ bot.on("message", async message => {
         .addField("Time", message.createdAt)
         .addField("Reason", kReason)
         
-        let incidentchannel = message.guild.channels.find(`name`, "incidents")
+        let incidentchannel = message.guild.channels.find(channel => channel.name === "incidents")
         if(!incidentchannel) return message.channel.send("Can't find incidents channel.")
 
         message.guild.member(kUser).kick(kReason)
@@ -57,7 +57,7 @@ bot.on("message", async message => {
         .addField("Time", message.createdAt)
         .addField("Reason", bReason)
         
-        let incidentchannel = message.guild.channels.find(`name`, "incidents")
+        let incidentchannel = message.guild.channels.find(channel => channel.name === "incidents")
         if(!incidentchannel) return message.channel.send("Can't find incidents channel.")
 
         message.guild.member(bUser).ban(bReason)
@@ -84,7 +84,7 @@ bot.on("message", async message => {
         .addField("Time", message.createdAt)
         .addField("Reason", reason)
 
-        let reportschannel = message.guild.channels.find(`name`, "reports")
+        let reportschannel = message.guild.channels.find(channel => channel.name === "reports")
         if(!reportschannel) return message.channel.send("Couldn't find reports channel.")
 
         message.delete().catch(O_o=>{})
@@ -102,6 +102,7 @@ bot.on("message", async message => {
         .setThumbnail(bicon)
         .addField("Created On", bot.user.createdAt)
         .addField("Bot Name", bot.user.username)
+        .addField("Running on", `${bot.guilds.size} Servers`)
         return message.channel.send(botembed)
     }
     if(cmd === `${prefix}serverinfo`){
@@ -124,8 +125,8 @@ bot.on("message", async message => {
         .setColor("#00ff1a")
         .setThumbnail(bicon)
         .addField("$help", "Bring up this message.")
-        .addField("$botinfo", "Gets information about the bot")
-        .addField("$serverinfo", "Gets information about the server.")
+        .addField("$botinfo", "Gets information about the bot", true)
+        .addField("$serverinfo", "Gets information about the server.", true)
         .addField("$report [@user] [reason]", "reports the user")
         
         return message.channel.send(helpembed)
