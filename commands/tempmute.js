@@ -8,7 +8,7 @@ module.exports.run = async (bot, message, args) => {
     //start of creating role
     if (!tomute) return message.reply("Couldn't find user.")
     if (!message.member.hasPermission("MANAGE_MESSAGES")) return message.reply("You don't have the permissions to mute them.")
-    //add can't mute them if they are already muted
+    if(tomute.roles.has("muted")) return message.reply("they are already muted.")
     //add it here later
     if (tomute.hasPermission("MANAGE_MESSAGES")) return message.reply("Can't mute them because they have moderator permissions")
     let muterole = message.guild.roles.find(role => role.name === "muted")
@@ -34,6 +34,7 @@ module.exports.run = async (bot, message, args) => {
     })
     //set mute time and send message
     let mutetimeraw = args[1]
+    if (!mutetimeraw) return message.reply("You didn't specify a time!")
     let muteunit = mutetimeraw[mutetimeraw.length - 1]
     let mutetimebef = mutetimeraw.split(muteunit)
     let mutetime = mutetimebef[0]
@@ -57,8 +58,6 @@ module.exports.run = async (bot, message, args) => {
     if(mutetime > 1) {
         muteunit = muteunit + "s"
     }
-
-    if (!mutetimeraw) return message.reply("You didn't specify a time!")
 
     await (tomute.addRole(muterole.id))
     let bicon = bot.user.displayAvatarURL
